@@ -1,0 +1,268 @@
+{
+    "conversation_id": "test_convo_001",
+    "current_id": "D5",
+    "messages": [
+        {
+            "message_id": "A",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Hi there!",
+            "parent_id": null,
+            "timestamp": 0,
+            "children_ids": [
+                "Z1",
+                "A1"
+            ]
+        },
+        {
+            "message_id": "B",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "What's the weather like?",
+            "parent_id": null,
+            "timestamp": 1,
+            "children_ids": [
+                "B1"
+            ]
+        },
+        {
+            "message_id": "Z1",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Hi! How can I help?",
+            "parent_id": "A",
+            "timestamp": 2,
+            "children_ids": [
+                "X2",
+                "Y2",
+                "Z2"
+            ]
+        },
+        {
+            "message_id": "A1",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Nice to meet you!",
+            "parent_id": "A",
+            "timestamp": 3,
+            "children_ids": []
+        },
+        {
+            "message_id": "B1",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Sure! Here's the forecast...",
+            "parent_id": "B",
+            "timestamp": 4,
+            "children_ids": [
+                "B2"
+            ]
+        },
+        {
+            "message_id": "X2",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Can you tell me a joke?",
+            "parent_id": "Z1",
+            "timestamp": 5,
+            "children_ids": [
+                "X3"
+            ]
+        },
+        {
+            "message_id": "Y2",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "What's 2+2?",
+            "parent_id": "Z1",
+            "timestamp": 6,
+            "children_ids": [
+                "Y3"
+            ]
+        },
+        {
+            "message_id": "Z2",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Give me a quote.",
+            "parent_id": "Z1",
+            "timestamp": 7,
+            "children_ids": [
+                "Z3"
+            ]
+        },
+        {
+            "message_id": "B2",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "What about tomorrow?",
+            "parent_id": "B1",
+            "timestamp": 8,
+            "children_ids": [
+                "B3",
+                "C3",
+                "D3"
+            ]
+        },
+        {
+            "message_id": "X3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Why did the chicken join a band? Because it had the drumsticks!",
+            "parent_id": "X2",
+            "timestamp": 9,
+            "children_ids": [
+                "X4"
+            ]
+        },
+        {
+            "message_id": "Y3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "2 + 2 = 4!",
+            "parent_id": "Y2",
+            "timestamp": 10,
+            "children_ids": []
+        },
+        {
+            "message_id": "Z3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "\"The best way to predict the future is to invent it.\" – Alan Kay",
+            "parent_id": "Z2",
+            "timestamp": 11,
+            "children_ids": []
+        },
+        {
+            "message_id": "B3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Tomorrow will be partly cloudy.",
+            "parent_id": "B2",
+            "timestamp": 12,
+            "children_ids": []
+        },
+        {
+            "message_id": "C3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Expect light showers in the evening.",
+            "parent_id": "B2",
+            "timestamp": 13,
+            "children_ids": []
+        },
+        {
+            "message_id": "D3",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Don't forget your umbrella!",
+            "parent_id": "B2",
+            "timestamp": 14,
+            "children_ids": [
+                "D4"
+            ]
+        },
+        {
+            "message_id": "X4",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Haha! Got more?",
+            "parent_id": "X3",
+            "timestamp": 15,
+            "children_ids": [
+                "X5",
+                "Y5",
+                "Z5"
+            ]
+        },
+        {
+            "message_id": "D4",
+            "role": "USER",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Thanks! What about next week?",
+            "parent_id": "D3",
+            "timestamp": 16,
+            "children_ids": [
+                "D5"
+            ]
+        },
+        {
+            "message_id": "X5",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Why don't skeletons fight each other? They don't have the guts.",
+            "parent_id": "X4",
+            "timestamp": 17,
+            "children_ids": []
+        },
+        {
+            "message_id": "Y5",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "I've got tons more jokes, just ask!",
+            "parent_id": "X4",
+            "timestamp": 18,
+            "children_ids": []
+        },
+        {
+            "message_id": "Z5",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Let's keep laughing!",
+            "parent_id": "X4",
+            "timestamp": 19,
+            "children_ids": []
+        },
+        {
+            "message_id": "D5",
+            "role": "ASSISTANT",
+            "models": [
+                "gpt-4"
+            ],
+            "message": "Looking ahead, next week starts warm and sunny.",
+            "parent_id": "D4",
+            "timestamp": 20,
+            "children_ids": []
+        }
+    ]
+}

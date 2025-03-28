@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON AI Assistant Conversation Tree Visualizer (D3.js)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        svg {
+            border: 1px solid #ccc;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .node circle {
+            fill: #69b3a2;
+            cursor: pointer;
+        }
+
+        .node text {
+            font-size: 14px;
+            text-anchor: middle;
+            fill: #000;
+        }
+
+        .link {
+            fill: none;
+            stroke: #aaa;
+            stroke-width: 2px;
+        }
+
+        .sibling-link {
+            stroke: #333;
+            stroke-width: 1.5px;
+            stroke-dasharray: 4 2;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 4px 8px;
+            font-size: 14px;
+            pointer-events: none;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JSON AI Assistant Conversation Tree Visualizer (D3.js)</h1>
+    <input type="file" id="fileInput" accept="application/json" />
+    <div id="tooltip" class="tooltip"></div>
+    <svg></svg>
+
+    <script>
+        let nextId = 0;
+        let treeData = [];
+        const svg = d3.select("svg");
+        const g = svg.append("g");
+        const siblingLayer = g.append("g");
+        const linkLayer = g.append("g");
+        const nodeLayer = g.append("g");
+        const tooltip = document.getElementById("tooltip");
+        let messageMap = new Map();
+
+        function buildTreeFromMessages(messages) {
+            messageMap = new Map();
+            const map = new Map();
+            messages.forEach(msg => {
+                const node = { id: nextId++, name: msg.message_id, children: [] };
+                map.set(msg.message_id, node);
+                messageMap.set(msg.message_id, msg);
+            });
+            messages.forEach(msg => {
+                const node = map.get(msg.message_id);
+                msg.children_ids.forEach(childId => {
+                    const child = map.get(childId);
+                    if (child) node.children.push(child);
+                });
+            });
+            const roots = messages.filter(msg => msg.parent_id === null).map(msg => map.get(msg.message_id));
+            return roots;
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    treeData = buildTreeFromMessages(json.messages);
+                    render();
+                } catch (err) {
+                    alert("Invalid JSON");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+
+        function render() {
+            linkLayer.selectAll("*").remove();
+            nodeLayer.selectAll("*").remove();
+            siblingLayer.selectAll("*").remove();
+
+            const root = {
+                id: "virtual_root",
+                name: "",
+                children: treeData,
+            };
+
+            const treeLayout = d3.tree().nodeSize([100, 140]);
+            const hierarchy = d3.hierarchy(root);
+            const tree = treeLayout(hierarchy);
+
+            const bounds = treeLayout(hierarchy);
+            const allNodes = bounds.descendants();
+            const minX = d3.min(allNodes, d => d.x);
+            const maxX = d3.max(allNodes, d => d.x);
+            const minY = d3.min(allNodes, d => d.y);
+            const maxY = d3.max(allNodes, d => d.y);
+
+            const offsetX = -minX + 100;
+            const offsetY = -minY + 50;
+            g.attr("transform", `translate(${offsetX},${offsetY})`);
+
+            linkLayer.selectAll(".link")
+                .data(tree.links().filter(link => link.source.data.id !== "virtual_root"))
+                .join("path")
+                .attr("class", "link")
+                .attr("d", d3.linkVertical()
+                    .x(d => d.x)
+                    .y(d => d.y));
+
+            const node = nodeLayer.selectAll(".node")
+                .data(tree.descendants().filter(d => d.data.id !== "virtual_root"))
+                .join("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.x},${d.y})`)
+                .on("mouseover", function (event, d) {
+                    const original = messageMap.get(d.data.name);
+                    tooltip.style.display = "block";
+                    tooltip.innerText = `ID: ${original.message_id}\n\n${original.message}`;
+                })
+                .on("mousemove", function (event) {
+                    tooltip.style.left = (event.pageX + 10) + "px";
+                    tooltip.style.top = (event.pageY + 10) + "px";
+                })
+                .on("mouseout", function () {
+                    tooltip.style.display = "none";
+                });
+
+            node.append("circle")
+                .attr("r", 30);
+
+            node.append("text")
+                .attr("dy", 5)
+                .text(d => d.data.name.length < 7 ? d.data.name : d.data.id);
+
+            tree.descendants().forEach(d => {
+                if (d.children && d.depth % 2 === 0) {
+                    const sorted = d.children.slice().sort((a, b) => a.x - b.x);
+                    for (let i = 0; i < sorted.length - 1; i++) {
+                        siblingLayer.append("line")
+                            .attr("class", "sibling-link")
+                            .attr("x1", sorted[i].x)
+                            .attr("y1", sorted[i].y)
+                            .attr("x2", sorted[i + 1].x)
+                            .attr("y2", sorted[i + 1].y);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
